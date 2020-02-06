@@ -8,15 +8,7 @@ spec:
     - name: demo-deploy-from-master
       interceptors:
         - cel:
-            filter: (header.match('X-GitHub-Event', 'push') && body.repository.full_name == 'bigkevmcd/demo-eventlistener') && body.ref.startsWith('refs/heads/master')
-      bindings:
-        - name: update-from-master-binding
-      template:
-        name: update-from-master-template
-    - name: other-deploy-from-master
-      interceptors:
-        - cel:
-            filter: (header.match('X-GitHub-Event', 'push') && body.repository.full_name == 'bigkevmcd/commit-status-tracker') && body.ref.startsWith('refs/heads/master')
+            filter: (header.match('X-GitHub-Event', 'push') && body.repository.full_name == 'bigkevmcd/demo-pipelines') && body.ref.startsWith('refs/heads/master')
       bindings:
         - name: update-from-master-binding
       template:
