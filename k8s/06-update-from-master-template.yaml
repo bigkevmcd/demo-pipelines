@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: update-from-master-template
+spec:
+  params:
+  - name: gitref
+    description: The git revision
+    default: master
+  - name: gitrepositoryurl
+    description: The git repository url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineRun
+    metadata:
+      name: update-config-pipeline-run-$(uid)
+    spec:
+      serviceAccountName: demo-sa
+      pipelineRef:
+        name: update-config-pipeline
+      params:
+        - name: NAMESPACE
+          value: default
+        - name: PATHTODEPLOYMENT
+          value: k8s
+      resources:
+        - name: source-repo
+          resourceSpec:
+            type: git
+            params:
+            - name: revision
+              value: $(params.gitref)
+            - name: url
+              value: $(params.gitrepositoryurl)

@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: update-config-pipeline
+spec:
+  params:
+    - name: NAMESPACE
+      type: string
+      description: "The namespace to update the config in"
+      default: default
+  resources:
+    - name: source-repo
+      type: git
+  tasks:
+    - name: apply-source
+      taskRef:
+        name: deploy-from-source-task
+      resources:
+        inputs:
+          - name: source
+            resource: source-repo
+      params:
+      - name: NAMESPACE
+        value: "$(params.NAMESPACE)"
+      - name: PATHTODEPLOYMENT
+        value: k8s
